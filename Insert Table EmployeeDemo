@@ -1,0 +1,10 @@
+INSERT INTO EmployeeDemographics VALUES
+(1002, 'Sara', 'Pullstone', 33, 'Female'),
+(1003, 'Pam', 'Bentley', 28, 'Female'),
+(1004, 'Stanley', 'Brown', 31, 'Male'),
+(1005, 'Angie', 'Green', 29, 'Female'),
+(1006, 'Scott', 'Weez', 49, 'Male'),
+(1007, 'George', 'Hudson', 22, 'Male'),
+(1008, 'Michael', 'Malone', 33, 'Male'),
+(1009, 'Marry', 'Mills', 31, 'Female'),
+(1010, 'Kevin', 'Stucci', 33, 'Male')
