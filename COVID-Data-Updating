@@ -1,0 +1,102 @@
+-- Working SQL File (Please check back for updates)
+-- Skills used: Temp Tables, Aggregate Functions, Creating Views, Converting Data Types, Updating Table, Altering Tables, CAST, Joins
+
+SELECT * FROM PProject..CovidDeathsM
+WHERE continent IS NOT NULL
+ORDER BY 3,4
+
+--SELECT * FROM PortfolioProject..CovidVaccinations
+--ORDER BY 3,4
+
+-- Select Data Being Used
+
+SELECT location, date, total_cases, total_deaths, population
+FROM Pproject..CovidDeathsM
+
+-- Alter date types when needed
+
+ALTER TABLE Pproject..CovidDeathsM
+ALTER COLUMN total_deaths FLOAT;
+
+ALTER TABLE Pproject..CovidDeathsM
+ALTER COLUMN total_cases FLOAT;
+
+ALTER TABLE Pproject..CovidDeathsM
+ALTER COLUMN population bigINT;
+
+ALTER TABLE Pproject..CovidDeathsM
+ALTER COLUMN date date;
+
+ALTER TABLE Pproject..CovidDeathsM
+ALTER COLUMN new_cases bigINT;
+
+ALTER TABLE Pproject..CovidDeathsM 
+ALTER COLUMN continent VARCHAR(50);
+
+-- This needed for showing TotalDeathCount because location was showing continents
+
+UPDATE Pproject..CovidDeathsM
+SET continent = NULL
+WHERE continent = ' '
+
+-- Examine diffence between Total Cases vs Total Deaths (% Difference)
+-- Shows the likelihood of death due to COVID
+ 
+SELECT location, date, total_cases, total_deaths, (total_deaths/NULLIF(total_cases,0)*100) AS DeathPercentage
+FROM Pproject..CovidDeathsM
+WHERE LOCATION like '%states%'
+ORDER BY 1,2;
+
+SELECT location, date, total_cases, total_deaths, (total_deaths/NULLIF(total_cases,0))*100 AS DeathPercentage
+FROM Pproject..CovidDeathsM
+ORDER BY 1,2;
+
+-- Looking at Total Cases vs. Population
+-- Shows what % of population infected by COVID
+
+SELECT location, date, population, total_cases, (total_cases/population)*100 AS InfectedPopPercentage
+FROM Pproject..CovidDeathsM
+WHERE LOCATION like '%states'
+ORDER BY date desc;
+
+-- Looking at Countries with Highest Infection Rates compared to Populations
+
+SELECT location, population, MAX(total_cases) AS HighestInfectionCount, MAX(nullif(total_cases,0)/nullif(population,0))*100 AS InfectedPopPercentage
+FROM Pproject..CovidDeathsM
+WHERE continent IS NOT NULL
+GROUP BY location, population
+ORDER BY InfectedPopPercentage DESC;
+
+-- Showing countries with highest death count per population
+
+SELECT location, MAX(total_deaths) AS TotalDeathCount
+FROM Pproject..CovidDeathsM
+WHERE continent IS NOT NULL
+GROUP BY location
+ORDER BY TotalDeathCount DESC;
+
+-- Break things down by continent Total Death Count
+
+SELECT location, MAX(total_deaths) AS TotalDeathCount
+FROM Pproject..CovidDeathsM
+WHERE continent IS NULL
+GROUP BY location
+ORDER BY TotalDeathCount DESC;
+
+-- Global numbers per day
+
+SELECT date, SUM(new_cases) as TotalCasesPerDay
+FROM Pproject..CovidDeathsM
+--WHERE LOCATION like '%states%'
+WHERE continent IS NOT NULL
+GROUP BY date
+ORDER BY 1,2;
+
+-- Global numbers per day
+
+SELECT date, SUM(new_cases), SUM(cast(new_deaths as INT))
+FROM Pproject..CovidDeathsM
+--WHERE LOCATION like '%states%'
+WHERE continent IS NOT NULL
+GROUP BY date
+ORDER BY 1,2;
