@@ -7,4 +7,4 @@ INSERT INTO EmployeeDemographics VALUES
 (1007, 'George', 'Hudson', 22, 'Male'),
 (1008, 'Michael', 'Malone', 33, 'Male'),
 (1009, 'Marry', 'Mills', 31, 'Female'),
-(1010, 'Kevin', 'Stucci', 33, 'Male')
+(1010, 'Kevin', 'Stucci', 33, 'Male');
